@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 interface IConnection {
-  onConnection: (ws: WebSocket) => void;
-  type: "screen" | "input";
+  onConnection: (screenWs: WebSocket | null, inputWs: WebSocket | null) => void;
+  type: "screen" | "input" | "both";
 }
 
 function Connection(props: IConnection) {
-  const [text, setText] = useState("127.0.0.1:8100");
+  const [text, setText] = useState("206.189.62.12:8100");
 
-  const handleConnection = (ip: string) => {
+  const openWebSocket = (ip: string, type: "screen" | "input") => {
     const socket = new WebSocket(`ws://${ip}`);
     socket.binaryType = "arraybuffer";
     socket.onopen = () => {
       console.log("Conn open");
-      socket.send(props.type);
+      socket.send(type);
     };
     socket.onerror = (e) => {
       console.log(e);
@@ -22,7 +22,19 @@ function Connection(props: IConnection) {
     socket.onclose = () => {
       console.log("Conn closed");
     };
-    props.onConnection(socket);
+    return socket;
+  };
+
+  const handleConnection = (ip: string) => {
+    let screenWs = null;
+    let inputWs = null;
+    if (props.type === "screen" || props.type === "both") {
+      screenWs = openWebSocket(ip, "screen");
+    }
+    if (props.type === "input" || props.type === "both") {
+      inputWs = openWebSocket(ip, "input");
+    }
+    props.onConnection(screenWs, inputWs);
   };
 
   return (

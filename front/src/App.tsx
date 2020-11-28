@@ -1,36 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import Full from "./routes/Full";
 import Screen from "./routes/Screen";
-
-const PREFIX = "cloud-gba";
+import Choice from "./routes/Choice";
+import { State } from "./lib/state";
 
 function App() {
+  const [state, setState] = useState(State.choice);
+  const [screenWs, setScreenWs] = useState<null | WebSocket>(null);
+  const [inputWs, setInputWs] = useState<null | WebSocket>(null);
+
+  const choose = (
+    sws: null | WebSocket,
+    iws: null | WebSocket,
+    nextState: State
+  ) => {
+    setScreenWs(sws);
+    setInputWs(iws);
+    setState(nextState);
+  };
+
+  let component = null;
+  switch (state) {
+    case State.choice:
+      component = <Choice choose={choose} />;
+      break;
+    case State.screen:
+      component = <Screen />;
+      break;
+    case State.full:
+      component = <Full inputWs={inputWs} screenWs={screenWs} />;
+      break;
+  }
   return (
     <div className="App">
-      <Body>
-        <Router>
-          <Switch>
-            <Route path="/full">
-              <Full />
-            </Route>
-            <Route path={`${PREFIX}/full`}>
-              <Full />
-            </Route>
-            <Route path="/screen">
-              <Screen />
-            </Route>
-            <Route path={`${PREFIX}/screen`}>
-              <Screen />
-            </Route>
-            <Route path="/">
-              <Full />
-            </Route>
-          </Switch>
-        </Router>
-      </Body>
+      <Body>{component}</Body>
     </div>
   );
 }

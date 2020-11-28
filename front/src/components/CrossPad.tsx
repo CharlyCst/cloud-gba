@@ -11,13 +11,28 @@ interface ICrossPad {
 }
 
 function CrossPad(props: ICrossPad) {
-  const handler = (event: Key, up: boolean) => () => {
+  const mouseHandler = (event: Key, up: boolean) => () => {
     if (props.ws) {
       if (up) {
         props.ws.send(`0${event}`);
       } else {
         props.ws.send(`1${event}`);
       }
+    } else {
+      console.log("Connection closed: can't send event");
+    }
+  };
+
+  const touchHandler = (event: Key, up: boolean) => (e: React.TouchEvent) => {
+    e.preventDefault();
+    if (props.ws) {
+      if (up) {
+        props.ws.send(`0${event}`);
+      } else {
+        props.ws.send(`1${event}`);
+      }
+    } else {
+      console.log("Connection closed: can't send event");
     }
   };
 
@@ -25,23 +40,31 @@ function CrossPad(props: ICrossPad) {
     <Container>
       <VerticalBranch
         isTop={true}
-        onMouseUp={handler(Key.up, true)}
-        onMouseDown={handler(Key.up, false)}
+        onMouseUp={mouseHandler(Key.up, true)}
+        onMouseDown={mouseHandler(Key.up, false)}
+        onTouchStart={touchHandler(Key.up, false)}
+        onTouchEnd={touchHandler(Key.up, true)}
       />
       <VerticalBranch
         isTop={false}
-        onMouseUp={handler(Key.down, true)}
-        onMouseDown={handler(Key.down, false)}
+        onMouseUp={mouseHandler(Key.down, true)}
+        onMouseDown={mouseHandler(Key.down, false)}
+        onTouchStart={touchHandler(Key.down, false)}
+        onTouchEnd={touchHandler(Key.down, true)}
       />
       <HorizontalBranch
         isLeft={true}
-        onMouseUp={handler(Key.left, true)}
-        onMouseDown={handler(Key.left, false)}
+        onMouseUp={mouseHandler(Key.left, true)}
+        onMouseDown={mouseHandler(Key.left, false)}
+        onTouchStart={touchHandler(Key.left, false)}
+        onTouchEnd={touchHandler(Key.left, true)}
       />
       <HorizontalBranch
         isLeft={false}
-        onMouseUp={handler(Key.right, true)}
-        onMouseDown={handler(Key.right, false)}
+        onMouseUp={mouseHandler(Key.right, true)}
+        onMouseDown={mouseHandler(Key.right, false)}
+        onTouchStart={touchHandler(Key.right, false)}
+        onTouchEnd={touchHandler(Key.right, true)}
       />
       <CenterNode />
     </Container>

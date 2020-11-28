@@ -1,23 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import Screen from "../components/Screen";
 import ActionButtonsPanel from "../components/ActionButtons";
 import CrossPad from "../components/CrossPad";
-import Connection from "../components/Connection";
 
-function Full() {
-  const [screenWs, setScreenWs] = useState<null | WebSocket>(null);
-  const [inputWs, setInputWs] = useState<null | WebSocket>(null);
+interface IFull {
+  screenWs: null | WebSocket;
+  inputWs: null | WebSocket;
+}
 
+function Full(props: IFull) {
   return (
     <Container>
-      <Connection onConnection={(ws) => setScreenWs(ws)} type="screen" />
-      <Connection onConnection={(ws) => setInputWs(ws)} type="input" />
-      <Screen ws={screenWs} />
+      <Screen ws={props.screenWs} />
       <ControlContainer>
-        <CrossPad ws={inputWs} />
-        <ActionButtonsPanel ws={inputWs} />
+        <CrossPad ws={props.inputWs} />
+        <ActionButtonsPanel ws={props.inputWs} />
       </ControlContainer>
     </Container>
   );

@@ -26,6 +26,21 @@ function ActionButtonsPanel(props: IActionButtons) {
       } else {
         props.ws.send(`1${event}`);
       }
+    } else {
+      console.log("Connection closed: can't send event");
+    }
+  };
+
+  const touchHandler = (event: Key, up: boolean) => (e: React.TouchEvent) => {
+    e.preventDefault();
+    if (props.ws) {
+      if (up) {
+        props.ws.send(`0${event}`);
+      } else {
+        props.ws.send(`1${event}`);
+      }
+    } else {
+      console.log("Connection closed: can't send event");
     }
   };
 
@@ -35,11 +50,15 @@ function ActionButtonsPanel(props: IActionButtons) {
         kind={ButtonKind.a}
         onUp={handler(Key.A, true)}
         onDown={handler(Key.A, false)}
+        onTouchDown={touchHandler(Key.A, true)}
+        onTouchUp={touchHandler(Key.A, false)}
       />
       <Button
         kind={ButtonKind.b}
         onUp={handler(Key.B, true)}
         onDown={handler(Key.B, false)}
+        onTouchDown={touchHandler(Key.B, true)}
+        onTouchUp={touchHandler(Key.B, false)}
       />
     </Container>
   );
@@ -55,6 +74,8 @@ interface IButtonProps {
   kind: ButtonKind;
   onUp: () => void;
   onDown: () => void;
+  onTouchUp: (e: React.TouchEvent) => void;
+  onTouchDown: (e: React.TouchEvent) => void;
 }
 
 function Button(props: IButtonProps) {
@@ -63,13 +84,15 @@ function Button(props: IButtonProps) {
       kind={props.kind}
       onMouseDown={props.onDown}
       onMouseUp={props.onUp}
+      onTouchStart={props.onTouchDown}
+      onTouchEnd={props.onTouchUp}
     >
       <span>{props.kind}</span>
     </ButtonContainer>
   );
 }
 
-const ButtonContainer = styled.button<{ kind: ButtonKind }>`
+const ButtonContainer = styled.div<{ kind: ButtonKind }>`
   background-color: #c8cad5;
   height: ${BUTTON_DIAMETER}px;
   width: ${BUTTON_DIAMETER}px;
