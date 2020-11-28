@@ -17,6 +17,7 @@ c.reset()
 
 screen_pool = []
 
+commands = [c.KEY_A, c.KEY_B, c.KEY_SELECT, c.KEY_START, c.KEY_RIGHT, c.KEY_LEFT, c.KEY_UP, c.KEY_DOWN, c.KEY_R, c.KEY_L]
 
 async def say_after(delay, what):
     await asyncio.sleep(delay)
@@ -31,7 +32,14 @@ async def serve(websocket, path):
     if co_type == "input":
         while True:
             command = await websocket.recv()
-            print("Received command", command)
+            #print("Received command", command)
+            up = True if command[0] == '1' else False
+            button = commands[int(command[1])]
+            if up:
+                c.add_keys(button)
+            else:
+                c.clear_keys(button)
+
 
 print("Starting websocket")
 
@@ -55,12 +63,12 @@ async def frame_loop():
             if compute_time > 40000000:
                 print("Warning, compute time is ", compute_time)
             #print("Time to get frame is ", t2 - t1)
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0.03)
 
 async def main():
     print(f"started at {time.strftime('%X')}")
 
-    server = websockets.serve(serve, "localhost", 8100)
+    server = websockets.serve(serve, None, 8100)
 
     await asyncio.gather(
         frame_loop(), 
