@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Key } from "../lib/input";
 
 export default ActionButtonsPanel;
 
@@ -13,20 +14,32 @@ enum ButtonKind {
   b = "B",
 }
 
-interface IActionButtons {}
+interface IActionButtons {
+  ws: WebSocket | null;
+}
 
 function ActionButtonsPanel(props: IActionButtons) {
+  const handler = (event: Key, up: boolean) => () => {
+    if (props.ws) {
+      if (up) {
+        props.ws.send(`0${event}`);
+      } else {
+        props.ws.send(`1${event}`);
+      }
+    }
+  };
+
   return (
     <Container>
       <Button
         kind={ButtonKind.a}
-        onUp={() => console.log("A up")}
-        onDown={() => console.log("A down")}
+        onUp={handler(Key.A, true)}
+        onDown={handler(Key.A, false)}
       />
       <Button
         kind={ButtonKind.b}
-        onUp={() => console.log("B up")}
-        onDown={() => console.log("B down")}
+        onUp={handler(Key.B, true)}
+        onDown={handler(Key.B, false)}
       />
     </Container>
   );

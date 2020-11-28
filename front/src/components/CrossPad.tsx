@@ -1,34 +1,47 @@
 import React from "react";
 import styled from "styled-components";
+import { Key } from "../lib/input";
 
 const PAD_BRANCH_WIDTH = 32;
 const PAD_BRANCH_LENGTH = 48;
 const PAD_RADIUS = 8;
 
-interface ICrossPad {}
+interface ICrossPad {
+  ws: WebSocket | null;
+}
 
 function CrossPad(props: ICrossPad) {
+  const handler = (event: Key, up: boolean) => () => {
+    if (props.ws) {
+      if (up) {
+        props.ws.send(`0${event}`);
+      } else {
+        props.ws.send(`1${event}`);
+      }
+    }
+  };
+
   return (
     <Container>
       <VerticalBranch
         isTop={true}
-        onMouseUp={() => console.log("up up")}
-        onMouseDown={() => console.log("up down")}
+        onMouseUp={handler(Key.up, true)}
+        onMouseDown={handler(Key.up, false)}
       />
       <VerticalBranch
         isTop={false}
-        onMouseUp={() => console.log("down up")}
-        onMouseDown={() => console.log("down down")}
+        onMouseUp={handler(Key.down, true)}
+        onMouseDown={handler(Key.down, false)}
       />
       <HorizontalBranch
         isLeft={true}
-        onMouseUp={() => console.log("left up")}
-        onMouseDown={() => console.log("left down")}
+        onMouseUp={handler(Key.left, true)}
+        onMouseDown={handler(Key.left, false)}
       />
       <HorizontalBranch
         isLeft={false}
-        onMouseUp={() => console.log("right up")}
-        onMouseDown={() => console.log("right down")}
+        onMouseUp={handler(Key.right, true)}
+        onMouseDown={handler(Key.right, false)}
       />
       <CenterNode />
     </Container>

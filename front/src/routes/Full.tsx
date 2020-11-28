@@ -8,14 +8,16 @@ import Connection from "../components/Connection";
 
 function Full() {
   const [screenWs, setScreenWs] = useState<null | WebSocket>(null);
+  const [inputWs, setInputWs] = useState<null | WebSocket>(null);
 
   return (
     <Container>
       <Connection onConnection={(ws) => setScreenWs(ws)} type="screen" />
+      <Connection onConnection={(ws) => setInputWs(ws)} type="input" />
       <Screen ws={screenWs} />
       <ControlContainer>
-        <CrossPad />
-        <ActionButtonsPanel />
+        <CrossPad ws={inputWs} />
+        <ActionButtonsPanel ws={inputWs} />
       </ControlContainer>
     </Container>
   );

@@ -7,7 +7,7 @@ interface IConnection {
 }
 
 function Connection(props: IConnection) {
-  const [text, setText] = useState("");
+  const [text, setText] = useState("127.0.0.1:8100");
 
   const handleConnection = (ip: string) => {
     const socket = new WebSocket(`ws://${ip}`);

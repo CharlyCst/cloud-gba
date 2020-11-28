@@ -12,25 +12,8 @@ interface IScreen {
 function Screen(props: IScreen) {
   const canvas = useRef<null | HTMLCanvasElement>(null);
 
-  const drawPlaceholder = async () => {
-    if (canvas.current === null || props.ws !== null) return;
-
-    const ctx = canvas.current.getContext("2d");
-    if (ctx === null) return;
-    if (Math.random() > 0.5) {
-      ctx.fillStyle = "#6b6b8c";
-    } else {
-      ctx.fillStyle = "#c8cad5";
-    }
-
-    ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    setTimeout(drawPlaceholder, 200);
-  };
-
   useEffect(() => {
-    if (props.ws === null) {
-      //drawPlaceholder();
-    } else {
+    if (props.ws) {
       props.ws.onmessage = (e) => {
         if (canvas && canvas.current) {
           const data = new Blob([e.data], { type: "image/jpeg" });
@@ -44,20 +27,19 @@ function Screen(props: IScreen) {
           img.src = url;
         }
       };
+    } else if (canvas.current) {
+      const ctx = canvas.current.getContext("2d");
+      if (ctx) {
+        ctx.fillStyle = "#c8cad5";
+        ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+      }
     }
-  }, [canvas, drawPlaceholder, props.ws]);
+  }, [canvas, props.ws]);
 
   return (
     <Container>
       <ScreenBorders>
-        {canvas ? (
-          <canvas width={SCREEN_WIDTH} height={SCREEN_HEIGHT} ref={canvas} />
-        ) : (
-          <>
-            <canvas width={0} height={0} ref={canvas} />
-            <DisplayPlaceholder />
-          </>
-        )}
+        <canvas width={SCREEN_WIDTH} height={SCREEN_HEIGHT} ref={canvas} />
       </ScreenBorders>
     </Container>
   );
