@@ -4,11 +4,13 @@ import styled from "styled-components";
 import Screen from "../components/Screen";
 import ActionButtonsPanel from "../components/ActionButtons";
 import CrossPad from "../components/CrossPad";
+import Connection from "../components/Connection";
 
 function Full() {
   return (
     <Container>
-      <Screen />
+      <Connection onConnection={(ws) => console.log(ws)} />
+      <Screen ws={null} />
       <ControlContainer>
         <CrossPad />
         <ActionButtonsPanel />

@@ -6,7 +6,7 @@ import ScreenComponent from "../components/Screen";
 function Screen() {
   return (
     <Container>
-      <ScreenComponent />
+      <ScreenComponent ws={null} />
     </Container>
   );
 }

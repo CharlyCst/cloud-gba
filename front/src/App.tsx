@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Full from "./routes/Full";
 import Screen from "./routes/Screen";
 
+const PREFIX = "cloud-gba";
+
 function App() {
   return (
     <div className="App">
@@ -14,7 +16,13 @@ function App() {
             <Route path="/full">
               <Full />
             </Route>
+            <Route path={`${PREFIX}/full`}>
+              <Full />
+            </Route>
             <Route path="/screen">
+              <Screen />
+            </Route>
+            <Route path={`${PREFIX}/screen`}>
               <Screen />
             </Route>
             <Route path="/">
