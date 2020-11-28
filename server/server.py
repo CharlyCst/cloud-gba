@@ -27,6 +27,7 @@ async def serve(websocket, path):
     print("Connection type is :", co_type)
     if co_type == "screen":
         screen_pool.append(websocket)
+        await websocket.recv()
     if co_type == "input":
         while True:
             command = await websocket.recv()

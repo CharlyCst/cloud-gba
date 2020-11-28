@@ -10,10 +10,26 @@ interface ICrossPad {}
 function CrossPad(props: ICrossPad) {
   return (
     <Container>
-      <VerticalBranch isTop={true} onClick={() => console.log("top")} />
-      <VerticalBranch isTop={false} onClick={() => console.log("bottom")} />
-      <HorizontalBranch isLeft={true} onClick={() => console.log("left")} />
-      <HorizontalBranch isLeft={false} onClick={() => console.log("right")} />
+      <VerticalBranch
+        isTop={true}
+        onMouseUp={() => console.log("up up")}
+        onMouseDown={() => console.log("up down")}
+      />
+      <VerticalBranch
+        isTop={false}
+        onMouseUp={() => console.log("down up")}
+        onMouseDown={() => console.log("down down")}
+      />
+      <HorizontalBranch
+        isLeft={true}
+        onMouseUp={() => console.log("left up")}
+        onMouseDown={() => console.log("left down")}
+      />
+      <HorizontalBranch
+        isLeft={false}
+        onMouseUp={() => console.log("right up")}
+        onMouseDown={() => console.log("right down")}
+      />
       <CenterNode />
     </Container>
   );

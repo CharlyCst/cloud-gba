@@ -13,7 +13,7 @@ function Screen(props: IScreen) {
   const canvas = useRef<null | HTMLCanvasElement>(null);
 
   const drawPlaceholder = async () => {
-    if (canvas.current === null) return;
+    if (canvas.current === null || props.ws !== null) return;
 
     const ctx = canvas.current.getContext("2d");
     if (ctx === null) return;
@@ -29,13 +29,23 @@ function Screen(props: IScreen) {
 
   useEffect(() => {
     if (props.ws === null) {
-      drawPlaceholder();
+      //drawPlaceholder();
     } else {
       props.ws.onmessage = (e) => {
-        console.log(e);
+        if (canvas && canvas.current) {
+          const data = new Blob([e.data], { type: "image/jpeg" });
+          const img = document.createElement("img");
+          const urlCreator = window.URL || window.webkitURL;
+          const url = urlCreator.createObjectURL(data);
+          const ctx = canvas.current.getContext("2d");
+          img.onload = () => {
+            ctx?.drawImage(img, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+          };
+          img.src = url;
+        }
       };
     }
-  }, [canvas, props.ws]);
+  }, [canvas, drawPlaceholder, props.ws]);
 
   return (
     <Container>

@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 interface IConnection {
   onConnection: (ws: WebSocket) => void;
+  type: "screen" | "input";
 }
 
 function Connection(props: IConnection) {
@@ -10,13 +11,18 @@ function Connection(props: IConnection) {
 
   const handleConnection = (ip: string) => {
     const socket = new WebSocket(`ws://${ip}`);
+    socket.binaryType = "arraybuffer";
     socket.onopen = () => {
-      console.log("Conn open!");
-      props.onConnection(socket);
+      console.log("Conn open");
+      socket.send(props.type);
     };
     socket.onerror = (e) => {
       console.log(e);
     };
+    socket.onclose = () => {
+      console.log("Conn closed");
+    };
+    props.onConnection(socket);
   };
 
   return (

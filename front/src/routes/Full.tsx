@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import Screen from "../components/Screen";
@@ -7,10 +7,12 @@ import CrossPad from "../components/CrossPad";
 import Connection from "../components/Connection";
 
 function Full() {
+  const [screenWs, setScreenWs] = useState<null | WebSocket>(null);
+
   return (
     <Container>
-      <Connection onConnection={(ws) => console.log(ws)} />
-      <Screen ws={null} />
+      <Connection onConnection={(ws) => setScreenWs(ws)} type="screen" />
+      <Screen ws={screenWs} />
       <ControlContainer>
         <CrossPad />
         <ActionButtonsPanel />

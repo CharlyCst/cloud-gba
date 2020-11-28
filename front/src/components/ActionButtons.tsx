@@ -18,8 +18,16 @@ interface IActionButtons {}
 function ActionButtonsPanel(props: IActionButtons) {
   return (
     <Container>
-      <Button kind={ButtonKind.a} onClick={() => console.log("A")} />
-      <Button kind={ButtonKind.b} onClick={() => console.log("B")} />
+      <Button
+        kind={ButtonKind.a}
+        onUp={() => console.log("A up")}
+        onDown={() => console.log("A down")}
+      />
+      <Button
+        kind={ButtonKind.b}
+        onUp={() => console.log("B up")}
+        onDown={() => console.log("B down")}
+      />
     </Container>
   );
 }
@@ -32,12 +40,17 @@ const Container = styled.div`
 
 interface IButtonProps {
   kind: ButtonKind;
-  onClick: () => void;
+  onUp: () => void;
+  onDown: () => void;
 }
 
 function Button(props: IButtonProps) {
   return (
-    <ButtonContainer kind={props.kind} onClick={props.onClick}>
+    <ButtonContainer
+      kind={props.kind}
+      onMouseDown={props.onDown}
+      onMouseUp={props.onUp}
+    >
       <span>{props.kind}</span>
     </ButtonContainer>
   );
