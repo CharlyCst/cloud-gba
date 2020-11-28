@@ -64,7 +64,7 @@ async def frame_loop():
             if compute_time > 40000000:
                 print("Warning, compute time is ", compute_time)
             #print("Time to get frame is ", t2 - t1)
-        await asyncio.sleep(max(0, 0.04 - compute_time / 1000000000))
+        await asyncio.sleep(max(0, 0.03 - compute_time / 1000000000))
 
 async def main():
     print(f"started at {time.strftime('%X')}")
