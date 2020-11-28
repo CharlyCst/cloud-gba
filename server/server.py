@@ -44,12 +44,13 @@ async def serve(websocket, path):
 print("Starting websocket")
 
 async def frame_loop():
+    compute_time = 0
     while True:
         print("Frame")
         if len(screen_pool) > 0:
+            t1 = time.clock_gettime_ns(time.CLOCK_REALTIME)
             buffer = BytesIO()
             c.run_frame()
-            t1 = time.clock_gettime_ns(time.CLOCK_REALTIME)
             image = i.to_pil()
             image.save(buffer, format="JPEG")
             tmp = buffer.getvalue()
@@ -63,7 +64,7 @@ async def frame_loop():
             if compute_time > 40000000:
                 print("Warning, compute time is ", compute_time)
             #print("Time to get frame is ", t2 - t1)
-        await asyncio.sleep(0.03)
+        await asyncio.sleep(0.04 - compute_time)
 
 async def main():
     print(f"started at {time.strftime('%X')}")
