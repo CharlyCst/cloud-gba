@@ -5,10 +5,14 @@ const SCREEN_WIDTH = 240;
 const SCREEN_HEIGHT = 160;
 const SCREEN_BORDER = 32;
 
-function Screen() {
+interface IScreen {
+  ws: WebSocket | null;
+}
+
+function Screen(props: IScreen) {
   const canvas = useRef<null | HTMLCanvasElement>(null);
 
-  const draw = async () => {
+  const drawPlaceholder = async () => {
     if (canvas.current === null) return;
 
     const ctx = canvas.current.getContext("2d");
@@ -20,12 +24,18 @@ function Screen() {
     }
 
     ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    setTimeout(draw, 200);
+    setTimeout(drawPlaceholder, 200);
   };
 
   useEffect(() => {
-    draw();
-  }, [canvas, draw]);
+    if (props.ws === null) {
+      drawPlaceholder();
+    } else {
+      props.ws.onmessage = (e) => {
+        console.log(e);
+      };
+    }
+  }, [canvas, props.ws]);
 
   return (
     <Container>
