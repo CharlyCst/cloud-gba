@@ -1,6 +1,7 @@
 from mgba import core,image
 import asyncio
 import websockets
+import time
 
 print("Loading game")
 c = core.load_path('spm.gba')
@@ -26,31 +27,24 @@ async def serve(websocket, path):
 
 print("Starting websocket")
 
-server = websockets.serve(serve, "localhost", 8100)
-asyncio.get_event_loop().run_until_complete(server)
-asyncio.get_event_loop().run_forever()
+async def frame_loop():
+    while True:
+        print("Frame")
+        await asyncio.sleep(5)
 
-# async def main():
-#     print(f"started at {time.strftime('%X')}")
+async def main():
+    print(f"started at {time.strftime('%X')}")
 
-#     task1 = asyncio.create_task(
-#         frame_loop())
+    server = websockets.serve(serve, "localhost", 8100)
 
-#     task2 = asyncio.create_task(
-#         say_after(2, 'world'))
+    await asyncio.gather(
+        frame_loop(), 
+        server
+    )
+    
+    print(f"finished at {time.strftime('%X')}")
 
-#     print(f"finished at {time.strftime('%X')}")
-
-# asyncio.run(main())
-
-# async def serve(websocket, path):
-#     for _ in range(nb_messages):
-#         await websocket.send("Hello, world!")
-
-
-# server = websockets.serve(serve, "localhost", 8100)
-
-
+asyncio.run(main())
 
 # for _ in range(300):
 #     c.run_frame()
