@@ -39,7 +39,7 @@ function Connection(props: IConnection) {
 
   return (
     <Container>
-      <input
+      <Input
         type="text"
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -53,4 +53,8 @@ export default Connection;
 
 const Container = styled.div`
   margin: 32px;
+`;
+
+const Input = styled.input`
+  margin: 8px;
 `;

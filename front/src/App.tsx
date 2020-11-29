@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Full from "./routes/Full";
 import Screen from "./routes/Screen";
 import Choice from "./routes/Choice";
+import Gamepad from "./routes/Gamepad";
 import { State } from "./lib/state";
 
 function App() {
@@ -27,10 +28,13 @@ function App() {
       component = <Choice choose={choose} />;
       break;
     case State.screen:
-      component = <Screen />;
+      component = <Screen ws={screenWs} />;
       break;
     case State.full:
       component = <Full inputWs={inputWs} screenWs={screenWs} />;
+      break;
+    case State.input:
+      component = <Gamepad ws={inputWs} />;
       break;
   }
   return (

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import Connection from "../components/Connection";
+import ChoicePanel from "../components/ChoicePanel";
 import { State } from "../lib/state";
 
 interface IChoice {
@@ -13,15 +14,16 @@ interface IChoice {
 }
 
 function Choice(props: IChoice) {
-  const [choise, setChoice] = useState(State.full);
+  const [choice, setChoice] = useState(State.full);
   return (
     <Container>
       <Connection
         onConnection={(screenWs, inputWs) =>
-          props.choose(screenWs, inputWs, State.full)
+          props.choose(screenWs, inputWs, choice)
         }
         type="both"
       />
+      <ChoicePanel choose={(c) => setChoice(c)} choice={choice} />
     </Container>
   );
 }

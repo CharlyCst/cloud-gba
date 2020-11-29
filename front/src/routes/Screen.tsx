@@ -3,10 +3,14 @@ import styled from "styled-components";
 
 import ScreenComponent from "../components/Screen";
 
-function Screen() {
+interface IScreen {
+  ws: null | WebSocket;
+}
+
+function Screen(props: IScreen) {
   return (
     <Container>
-      <ScreenComponent ws={null} />
+      <ScreenComponent ws={props.ws} />
     </Container>
   );
 }
