@@ -13,7 +13,7 @@ interface IFull {
 function Full(props: IFull) {
   return (
     <Container>
-      <Screen ws={props.screenWs} />
+      <Screen ws={props.screenWs} fullScreen={false} />
       <ControlContainer>
         <CrossPad ws={props.inputWs} />
         <ActionButtonsPanel ws={props.inputWs} />

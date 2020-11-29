@@ -46,15 +46,19 @@ async def serve(websocket, path):
         except:
             pass
     if co_type == "input":
-        while True:
-            command = await websocket.recv()
-            # print("Received command", command)
-            up = True if command[0] == "1" else False
-            button = commands[int(command[1])]
-            if up:
-                c.add_keys(button)
-            else:
-                c.clear_keys(button)
+        again = True
+        while again:
+            try:
+                command = await websocket.recv()
+                # print("Received command", command)
+                up = True if command[0] == "1" else False
+                button = commands[int(command[1])]
+                if up:
+                    c.add_keys(button)
+                else:
+                    c.clear_keys(button)
+            except:
+                again = False
 
 
 print("Starting websocket")

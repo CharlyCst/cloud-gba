@@ -10,7 +10,7 @@ interface IScreen {
 function Screen(props: IScreen) {
   return (
     <Container>
-      <ScreenComponent ws={props.ws} />
+      <ScreenComponent ws={props.ws} fullScreen={true} />
     </Container>
   );
 }
